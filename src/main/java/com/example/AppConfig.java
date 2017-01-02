@@ -1,7 +1,6 @@
 package com.example;
 
-import com.example.app.AddCalculator;
-import com.example.app.Calculator;
+import com.example.app.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,5 +15,15 @@ public class AppConfig {
 	@Bean
     Calculator calculator() {
         return new AddCalculator(); //생성자로 생성한 Calculator 타입의 calculator 인스턴스를 DI 컨테이너가 싱글톤으로 관리합니다.
+    }
+
+    @Bean
+    ArgumentResolver argumentResolver() {
+        return new ScannerArgumentResolver();
+    }
+
+    @Bean
+    Frontend frontend() {
+        return new Frontend();
     }
 }
