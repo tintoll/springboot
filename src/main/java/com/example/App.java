@@ -4,6 +4,8 @@ import com.example.app.Argument;
 import com.example.app.ArgumentResolver;
 import com.example.app.Calculator;
 import com.example.app.Frontend;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -16,7 +18,7 @@ import java.util.Scanner;
 //@Import(AppConfig.class)
 //JavaConfig를 읽어들이기 위해서 @Configuration이 붙은 클래스를 지정합니다.
 @ComponentScan
-public class App {
+public class App implements CommandLineRunner {
     public static void main(String[] args) {
     	//자바 7에서 도입한 try-with-resources 문 안에 변수를 선언하여 try안쪽에서 처리가 끝나면 자동으로 close()메소드가 호출되어 
     	//DI컨테이너가 소멸되고 어플리케이션이 실행을 마치게 됩니다.
@@ -39,8 +41,23 @@ public class App {
             int result = calculator.calc(argument.getA(), argument.getB());
             */
 
-            Frontend frontend = context.getBean(Frontend.class);
-            frontend.run();
+            //Frontend frontend = context.getBean(Frontend.class);
+            //frontend.run();
+            SpringApplication.run(App.class,args);
         }
+    }
+
+    @Autowired
+    ArgumentResolver argumentResolver;
+
+    @Autowired
+    Calculator calculator;
+
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("Enter 2 number like 'a b' : ");
+        Argument argument = argumentResolver.resolve(System.in);
+        int result = calculator.calc(argument.getA(),argument.getB());
+        System.out.println("result : "+result);
     }
 }
